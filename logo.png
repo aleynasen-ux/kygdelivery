@@ -1,0 +1,216 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1:3306
+-- Generation Time: May 26, 2025 at 09:59 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `kygdelivery`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `basket`
+--
+
+CREATE TABLE `basket` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `total` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL,
+  `cart_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `restaurant_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `total` float NOT NULL,
+  `status` enum('Pending','Accepted','Shipping','Delivered') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `cart_id`, `user_id`, `product_id`, `restaurant_id`, `quantity`, `total`, `status`) VALUES
+(28, 30, 36, 9, 12, 2, 80, 'Pending'),
+(29, 31, 40, 10, 12, 1, 50, 'Delivered'),
+(30, 32, 41, 9, 12, 10, 400, 'Shipping'),
+(31, 33, 41, 13, 14, 1, 120, 'Shipping');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
+
+CREATE TABLE `products` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `price` float NOT NULL,
+  `description` text NOT NULL,
+  `image` varchar(100) NOT NULL,
+  `restaurant_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `name`, `price`, `description`, `image`, `restaurant_id`) VALUES
+(1, 'Taco Supreme', 10, '', 'taco.png', 11),
+(2, 'Taco Supreme', 40, 'A classic taco packed with seasoned beef, fresh lettuce, tomatoes, cheddar cheese, and sour cream in a crispy shell.', 'taco.png', 11),
+(8, 'Cheese Quesadilla', 40, 'Grilled tortilla stuffed with melted mozzarella and cheddar, served with a side of spicy salsa.', 'images (4).jpeg', 12),
+(9, 'Taco Supreme', 40, 'A classic taco packed with seasoned beef, fresh lettuce, tomatoes, cheddar cheese.', 'download (2).jpeg', 12),
+(10, 'Chicken Burrito', 50, 'Flour tortilla filled with grilled chicken, rice, beans, cheese, and creamy chipotle sauce.', 'download (1).jpeg', 12),
+(11, 'Margherita Pizza', 100, 'A timeless classic with a thin crust, rich tomato sauce, melted mozzarella cheese, and a touch of fresh basil. Simple, elegant, perfect.', 'images (5).jpeg', 14),
+(12, 'Veggie Pizza', 100, 'A colorful medley of bell peppers, mushrooms, corn, and olives on a cheesy base — fresh, flavorful, and guilt-free.', 'best-veggie-pizza-featured-image-square-2.jpg', 14),
+(13, 'BBQ Chicken Pizza', 120, 'Tender spiced chicken chunks layered with cheddar cheese and smoky BBQ sauce. A hearty bite for true meat lovers.', 'download (3).jpeg', 14);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `restaurants`
+--
+
+CREATE TABLE `restaurants` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `location` varchar(100) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `logo` varchar(100) NOT NULL,
+  `user_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `restaurants`
+--
+
+INSERT INTO `restaurants` (`id`, `name`, `location`, `phone`, `logo`, `user_id`) VALUES
+(12, 'Taco Love', 'Kyrenia', '9385092385', 'images (3).jpeg', 33),
+(14, 'Pizza Pisa', 'Nicosia', '698439843', 'images.jpeg', 34),
+(15, 'Burger Paradise', 'Nicosia', '093253285', 'download.jpeg', 42);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `address` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `role` enum('customer','manager','admin') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `username`, `address`, `password`, `role`) VALUES
+(33, 'manager3', 'manager3', 'kyrenia', '$2y$10$NWQ7hhKE0.p7Xtgg9TpAa.BuIHcsHbUluSY0V8iHpzwybLBydMFWq', 'manager'),
+(34, 'manager2', 'manager2', 'nicosia', '$2y$10$/pWVBV0e8M3OM7DaUt3JLOkS58fu1x0LDkaLn9mFqf1fXMA/dy0c6', 'manager'),
+(35, 'admin1', 'admin1', 'Magusa', '$2y$10$9z2x/.fkR2wKKfBilZG60OR70UjZSrHjsm2LPivrWfJQ4caC5yQvW', 'admin'),
+(40, 'Mehmet', 'Mehmet1', 'magusa', '$2y$10$YOQu2cbf3DCm4ifkkZTfHOba/FyJu23IO1k9R99jw58gTMFMAJWqC', 'customer'),
+(41, 'Zeynep', 'Zeynep', 'Magusa', '$2y$10$iHc2yaHcebP7PYagvwF2he9WK6CayL6k1tM3OlfFMONHeJOyzbK4C', 'customer'),
+(42, 'manager4', 'manager4', 'nicosia', '$2y$10$odrxzjFm.DW.hHbZMck0ROLGgtdaVJREZDxmCXMvpoSUbcqVwY0MO', 'manager');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `basket`
+--
+ALTER TABLE `basket`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `restaurants`
+--
+ALTER TABLE `restaurants`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `basket`
+--
+ALTER TABLE `basket`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `restaurants`
+--
+ALTER TABLE `restaurants`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
